@@ -10,7 +10,6 @@ int front = -1, rear = -1;
 void enqueue(int data) {
     if (rear == MAX_SIZE - 1) {
         printf("Queue is Overflow\n");
-        return;
     }
 
     if (front == -1 && rear == -1) {
@@ -26,7 +25,6 @@ void enqueue(int data) {
 void dequeue() {
     if (front == -1 && rear == -1) {
         printf("Queue is Underflow\n");
-        return;
     }
 
     printf("%d Dequeued successfully.\n", queue[front]);
@@ -41,7 +39,6 @@ void dequeue() {
 void display() {
     if (front == -1 && rear == -1) {
         printf("Queue is Underflow\n");
-        return;
     }
 
     printf("Queue elements: ");
@@ -85,7 +82,4 @@ int main() {
 
     return 0;
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> 58e2d1c6b7e81a50760e4d1a18696e1ace2df76a
