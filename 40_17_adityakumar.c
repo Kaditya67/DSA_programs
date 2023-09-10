@@ -43,7 +43,7 @@ int dequeue() {
     }
     
     struct node *temp = front;
-    int value = temp->info;
+    int value = temp->info; // This value is dequeued
     
     if (front == rear) {
         // If there is only one element in the queue, set both front and rear to NULL
@@ -54,7 +54,7 @@ int dequeue() {
     }
     
     freenode(temp);
-    return value;
+    return value; // It will be displayed
 }
 
 // Function to display the elements in the queue
