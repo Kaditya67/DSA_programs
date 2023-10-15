@@ -14,7 +14,7 @@ int isFibonacci(int num) {
 }
 
 int main() {
-    int num;
+    int num;git
     printf("Enter a number: ");
     scanf("%d", &num);
 
