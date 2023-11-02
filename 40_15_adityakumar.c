@@ -108,7 +108,7 @@ void deleteatlocation(int p) {
         printf("List Is Empty\n");
     } else {
         if (p == 1) {
-            t2 = list;
+            t2 = list;   
             list = list->next;
             freenode(t2);
         } else {
