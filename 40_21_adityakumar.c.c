@@ -6,7 +6,6 @@
 int queue[MAX_SIZE];
 int front = -1, rear = -1;
 
-
 void enqueue(int data) {
     if (rear == MAX_SIZE - 1) {
         printf("Queue is Overflow\n");
@@ -48,15 +47,23 @@ void display() {
     printf("\n");
 }
 
+int count() {
+    if (front == -1 && rear == -1) {
+        return 0;
+    }
+    return rear - front + 1;
+}
+
 int main() {
     int choice, data;
 
-    while(1) {
+    while (1) {
         printf("\nQueue Operations:\n");
         printf("1. Enqueue\n");
         printf("2. Dequeue\n");
         printf("3. Display\n");
-        printf("4. Exit\n");
+        printf("4. Count\n");
+        printf("5. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -73,6 +80,9 @@ int main() {
                 display();
                 break;
             case 4:
+                printf("Number of elements in the queue: %d\n", count());
+                break;
+            case 5:
                 printf("Exiting...\n");
                 exit(1);
             default:
@@ -82,4 +92,3 @@ int main() {
 
     return 0;
 }
-

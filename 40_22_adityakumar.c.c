@@ -6,58 +6,49 @@ struct node {
     struct node *next;
 };
 
-// Function to allocate memory for a new node
 struct node *getnode(void) {
     return (struct node *)malloc(sizeof(struct node));
 }
 
-// Function to free memory for a given node
 void freenode(struct node *p) {
     free(p);
 }
 
-struct node *front = NULL; // Initialize the front of the queue
-struct node *rear = NULL;  // Initialize the rear of the queue
+struct node *front = NULL;
+struct node *rear = NULL;
 
-// Function to enqueue (insert) an element at the rear of the queue
 void enqueue(int x) {
     struct node *newnode = getnode();
     newnode->info = x;
     newnode->next = NULL;
     
     if (rear == NULL) {
-        // If the queue is empty, set both front and rear to the new node
         front = rear = newnode;
     } else {
-        // Otherwise, add the new node to the rear of the queue
         rear->next = newnode;
         rear = newnode;
     }
 }
 
-// Function to dequeue (remove) an element from the front of the queue
 int dequeue() {
     if (front == NULL) {
         printf("Queue is empty\n");
-        return -1; // or some error code
+        return -1;
     }
     
     struct node *temp = front;
-    int value = temp->info; // This value is dequeued
+    int value = temp->info;
     
     if (front == rear) {
-        // If there is only one element in the queue, set both front and rear to NULL
         front = rear = NULL;
     } else {
-        // Otherwise, move front to the next node in the queue
         front = front->next;
     }
     
     freenode(temp);
-    return value; // It will be displayed
+    return value;
 }
 
-// Function to display the elements in the queue
 void display() {
     struct node *temp = front;
     if (temp == NULL) {
@@ -73,6 +64,16 @@ void display() {
     printf("NULL\n");
 }
 
+int count() {
+    struct node *temp = front;
+    int count = 0;
+    while (temp != NULL) {
+        count++;
+        temp = temp->next;
+    }
+    return count;
+}
+
 int main() {
     int choice, x;
 
@@ -80,7 +81,8 @@ int main() {
         printf("1. Enqueue\n");
         printf("2. Dequeue\n");
         printf("3. Display\n");
-        printf("4. Exit\n");
+        printf("4. Count\n");
+        printf("5. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -100,6 +102,9 @@ int main() {
                 display();
                 break;
             case 4:
+                printf("Number of elements in the queue: %d\n", count());
+                break;
+            case 5:
                 exit(0);
             default:
                 printf("Invalid choice\n");

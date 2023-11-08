@@ -15,7 +15,7 @@ void enqueue(int x) {
         rear = 0;
         queue[rear] = x;
     } else {
-        rear++;
+        rear = (rear + 1) % MAX;
         queue[rear] = x;
     }
 }
@@ -42,20 +42,30 @@ void display() {
         if (front <= rear) {
             while (i <= rear) {
                 printf("%d ", queue[i]);
-                i++;
+                i = (i + 1) % MAX;
             }
         } else {
             while (i < MAX) {
                 printf("%d ", queue[i]);
-                i++;
+                i = (i + 1) % MAX;
             }
             i = 0;
             while (i <= rear) {
                 printf("%d ", queue[i]);
-                i++;
+                i = (i + 1) % MAX;
             }
         }
         printf("\n");
+    }
+}
+
+int count() {
+    if (front == -1) {
+        return 0;
+    } else if (front <= rear) {
+        return rear - front + 1;
+    } else {
+        return MAX - front + rear + 1;
     }
 }
 
@@ -63,7 +73,7 @@ int main() {
     int choice, data;
 
     while (1) {
-        printf("\n1. Enqueue\n2. Dequeue\n3. Display\n4. Exit\n");
+        printf("\n1. Enqueue\n2. Dequeue\n3. Display\n4. Count\n5. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -80,6 +90,9 @@ int main() {
                 display();
                 break;
             case 4:
+                printf("Number of elements in the queue: %d\n", count());
+                break;
+            case 5:
                 exit(0);
             default:
                 printf("Invalid choice.\n");

@@ -1,25 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Define the structure for a node in the linked list
 struct node {
-    int info;           // Data of the node
-    struct node *next;  // Pointer to the next node
+    int info;
+    struct node *next;
 };
 
-// Function to allocate memory for a new node
 struct node *getnode(void) {
     return (struct node *)malloc(sizeof(struct node));
 }
 
-// Function to free memory for a given node
 void freenode(struct node *p) {
     free(p);
 }
 
-struct node *stack = NULL; // Initialize the stack using the linked list
+struct node *stack = NULL;
 
-// Function to push an element onto the stack
 void push(int x) {
     struct node *newnode = getnode();
     newnode->info = x;
@@ -27,11 +23,10 @@ void push(int x) {
     stack = newnode;
 }
 
-// Function to pop an element from the stack
 int pop() {
     if (stack == NULL) {
         printf("Stack is empty\n");
-        return -1; // or some error code
+        return -1;
     }
     struct node *temp = stack;
     int value = temp->info;
@@ -40,7 +35,6 @@ int pop() {
     return value;
 }
 
-// Function to display the stack
 void display() {
     struct node *temp = stack;
     if (temp == NULL) {
@@ -55,6 +49,16 @@ void display() {
     printf("NULL\n");
 }
 
+int count() {
+    int count = 0;
+    struct node *temp = stack;
+    while (temp != NULL) {
+        count++;
+        temp = temp->next;
+    }
+    return count;
+}
+
 int main() {
     int choice, x;
 
@@ -62,7 +66,8 @@ int main() {
         printf("1. Push\n");
         printf("2. Pop\n");
         printf("3. Display\n");
-        printf("4. Exit\n");
+        printf("4. Count\n");
+        printf("5. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -82,6 +87,9 @@ int main() {
                 display();
                 break;
             case 4:
+                printf("Number of elements in the stack: %d\n", count());
+                break;
+            case 5:
                 exit(0);
             default:
                 printf("Invalid choice\n");

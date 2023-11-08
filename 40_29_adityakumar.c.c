@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-void bubbleSort(int *a, int n);
+void selectionSort(int *a, int n);
 
 int main() {
     int n;
@@ -18,7 +18,7 @@ int main() {
     }
 
     printf("After Sorting : ");
-    bubbleSort(a, n);
+    selectionSort(a, n);
     for (int i = 0; i < n; i++) {
         printf("a%d = %d\n", i + 1, a[i]);
     }
@@ -26,14 +26,13 @@ int main() {
     return 0;
 }
 
-void bubbleSort(int *a, int n) {
-    int temp;
+void selectionSort(int *a, int n) {
     for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (a[j] > a[j + 1]) {
-                temp = a[j];
-                a[j] = a[j + 1];
-                a[j + 1] = temp;
+        for (int j = i + 1; j < n; j++) {
+            if (a[j] < a[i]) {
+                int temp = a[i];
+                a[i] = a[j];
+                a[j] = temp;
             }
         }
     }

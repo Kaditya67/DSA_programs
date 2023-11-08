@@ -1,13 +1,14 @@
 #include <stdio.h>
-#include<stdlib.h> 	// exit
-#define MAX_SIZE 10 	// size of array 10
+#include <stdlib.h>
+
+#define MAX_SIZE 10
 
 int stack[MAX_SIZE];
 int top = -1;
 
 void push(int value) {
     if (top >= MAX_SIZE - 1) {
-        printf("Stack is Overflow");
+        printf("Stack Overflow\n");
     } else {
         top++;
         stack[top] = value;
@@ -17,7 +18,7 @@ void push(int value) {
 
 void pop() {
     if (top < 0) {
-        printf("Stack is Underflow\n");
+        printf("Stack Underflow\n");
     } else {
         printf("Popped element: %d\n", stack[top]);
         top--;
@@ -26,13 +27,17 @@ void pop() {
 
 void display() {
     if (top < 0) {
-        printf("Stack is Undeflow\n");
+        printf("Stack is empty\n");
     } else {
         printf("Stack elements:\n");
         for (int i = top; i >= 0; i--) {
             printf("%d\n", stack[i]);
         }
     }
+}
+
+int count() {
+    return top + 1;
 }
 
 int main() {
@@ -43,7 +48,8 @@ int main() {
         printf("1. Push\n");
         printf("2. Pop\n");
         printf("3. Display\n");
-        printf("4. Exit\n");
+        printf("4. Count\n");
+        printf("5. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -60,8 +66,11 @@ int main() {
                 display();
                 break;
             case 4:
+                printf("Number of elements in the stack: %d\n", count());
+                break;
+            case 5:
                 printf("Exiting program.\n");
-                exit(1);
+                exit(0);
             default:
                 printf("Invalid choice. Please select a valid option.\n");
         }
