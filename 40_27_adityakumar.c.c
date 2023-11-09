@@ -1,57 +1,53 @@
-#include<stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 
-void main(){
-
-    int choice,s,n;
-    printf("Enter the number of elements :");
-    scanf("%d",&n);
+int main() {
+    int choice, s, n;
+    printf("Enter the number of elements: ");
+    scanf("%d", &n);
     int a[n];
-    int beg,end,mid;
+    int beg, end, mid;
 
-    printf("Enter the elements of Array :\n");
-    for(int i=0;i<n;i++){
-        scanf("%d",&a[i]);
+    printf("Enter the elements of Array:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &a[i]);
     }
 
-    do{
+    do {
+        printf("Press 1 to Search\nPress 2 to Exit: ");
+        scanf("%d", &choice);
 
-            printf("Press 1 to Search \nPress 2 to Exit :");
-            scanf("%d",&choice);
-
-        switch(choice){
-
+        switch (choice) {
             case 1:
+                printf("Enter element to search: ");
+                scanf("%d", &s);
 
-                printf("Enter element to search : ");
-                scanf("%d",&s);
+                beg = 0;
+                end = n - 1;
+                mid = (beg + end) / 2;
 
-                beg=0;
-                end=n-1;
-                mid=(beg+end)/2;
-
-                while((beg<end) && (a[mid]!=s)){
-                    if(s<a[mid]){
-                        beg=0;
-                        end=mid-1;
+                while (beg <= end && a[mid] != s) {
+                    if (s < a[mid]) {
+                        end = mid - 1;
+                    } else {
+                        beg = mid + 1;
                     }
-                    else{
-                        beg=mid+1;
-                        mid=(beg+end)/n;
-                    }
+                    mid = (beg + end) / 2;
                 }
-                if(a[mid]==s){
-                    printf("\nElement Found \n");
+                
+                if (beg <= end) {
+                    printf("Element Found\n");
+                } else {
+                    printf("Element Not Found\n");
                 }
-                else{
-                    printf("\nElement Not Found\n");
-                }
+                break;
 
             case 2:
-                exit(1);
+                exit(0);
             default:
-                printf("Invalid Choice");
-
+                printf("Invalid Choice\n");
         }
-    }while(1);
+    } while (1);
+
+    return 0;
 }
