@@ -19,120 +19,111 @@ Node* createNode(int data) {
     return newNode;
 }
 
-Node* createCircularLinkedList() {
-    return NULL;
-}
-
-void insertAtBeginning(Node** head, int data) {
+Node* insertAtBeginning(Node* head, int data) {
     Node* newNode = createNode(data);
-    if (*head == NULL) {
-        *head = newNode;
-        (*head)->next = *head; // Circular reference
-    } else {
-        Node* temp = *head;
-        while (temp->next != *head) {
-            temp = temp->next;
-        }
-        temp->next = newNode;
-        newNode->next = *head;
-        *head = newNode;
+    if (head == NULL) {
+        return newNode;
     }
+    newNode->next = head;
+    Node* temp = head;
+    while (temp->next != head) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+    return newNode;
 }
 
-void insertAtEnd(Node** head, int data) {
+Node* insertAtEnd(Node* head, int data) {
     Node* newNode = createNode(data);
-    if (*head == NULL) {
-        *head = newNode;
-        (*head)->next = *head; // Circular reference
-    } else {
-        Node* temp = *head;
-        while (temp->next != *head) {
-            temp = temp->next;
-        }
-        temp->next = newNode;
-        newNode->next = *head;
+    if (head == NULL) {
+        return newNode;
     }
+    Node* temp = head;
+    while (temp->next != head) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+    newNode->next = head;
+    return head;
 }
 
-void insertAtLocation(Node** head, int data, int position) {
+Node* insertAtLocation(Node* head, int data, int position) {
     if (position == 0) {
-        insertAtBeginning(head, data);
-    } else {
-        Node* newNode = createNode(data);
-        Node* temp = *head;
-        for (int i = 0; i < position - 1; ++i) {
-            if (temp->next == *head) {
-                printf("Invalid position\n");
-                return;
-            }
-            temp = temp->next;
-        }
-        newNode->next = temp->next;
-        temp->next = newNode;
+        return insertAtBeginning(head, data);
     }
+    Node* newNode = createNode(data);
+    Node* temp = head;
+    for (int i = 0; i < position - 1; ++i) {
+        if (temp->next == head) {
+            printf("Invalid position\n");
+            return head;
+        }
+        temp = temp->next;
+    }
+    newNode->next = temp->next;
+    temp->next = newNode;
+    return head;
 }
 
-void deleteAtBeginning(Node** head) {
-    if (*head == NULL) {
+Node* deleteAtBeginning(Node* head) {
+    if (head == NULL) {
         printf("List is empty\n");
-        return;
+        return NULL;
     }
-    if ((*head)->next == *head) {
-        free(*head);
-        *head = NULL;
-    } else {
-        Node* temp = *head;
-        while (temp->next != *head) {
-            temp = temp->next;
-        }
-        temp->next = (*head)->next;
-        Node* toDelete = *head;
-        *head = (*head)->next;
-        free(toDelete);
+    if (head->next == head) {
+        free(head);
+        return NULL;
     }
+    Node* temp = head;
+    while (temp->next != head) {
+        temp = temp->next;
+    }
+    temp->next = head->next;
+    free(head);
+    return temp->next;
 }
 
-void deleteAtEnd(Node** head) {
-    if (*head == NULL) {
+Node* deleteAtEnd(Node* head) {
+    if (head == NULL) {
         printf("List is empty\n");
-        return;
+        return NULL;
     }
-    if ((*head)->next == *head) {
-        free(*head);
-        *head = NULL;
-    } else {
-        Node* temp = *head;
-        Node* prev = NULL;
-        while (temp->next != *head) {
-            prev = temp;
-            temp = temp->next;
-        }
-        prev->next = *head;
-        free(temp);
+    if (head->next == head) {
+        free(head);
+        return NULL;
     }
+    Node* temp = head;
+    Node* prev = NULL;
+    while (temp->next != head) {
+        prev = temp;
+        temp = temp->next;
+    }
+    prev->next = head;
+    free(temp);
+    return head;
 }
 
-void deleteAtLocation(Node** head, int position) {
-    if (*head == NULL) {
+Node* deleteAtLocation(Node* head, int position) {
+    if (head == NULL) {
         printf("List is empty\n");
-        return;
+        return NULL;
     }
     if (position == 0) {
-        deleteAtBeginning(head);
-    } else {
-        Node* temp = *head;
-        Node* prev = NULL;
-        for (int i = 0; i < position; ++i) {
-            if (temp->next == *head) {
-                printf("Invalid position\n");
-                return;
-            }
-            prev = temp;
-            temp = temp->next;
-        }
-        prev->next = temp->next;
-        free(temp);
+        return deleteAtBeginning(head);
     }
+    Node* temp = head;
+    Node* prev = NULL;
+    for (int i = 0; i < position; ++i) {
+        if (temp->next == head) {
+            printf("Invalid position\n");
+            return head;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+    prev->next = temp->next;
+    free(temp);
+    return head;
 }
 
 void display(Node* head) {
@@ -177,26 +168,26 @@ int count(Node* head) {
     return count;
 }
 
-void reverse(Node** head) {
-    if (*head == NULL) {
+Node* reverse(Node* head) {
+    if (head == NULL) {
         printf("List is empty\n");
-        return;
+        return NULL;
     }
     Node* prev = NULL;
-    Node* current = *head;
+    Node* current = head;
     Node* nextNode = NULL;
     do {
         nextNode = current->next;
         current->next = prev;
         prev = current;
         current = nextNode;
-    } while (current != *head);
-    (*head)->next = prev;
-    *head = prev;
+    } while (current != head);
+    head->next = prev;
+    return prev;
 }
 
 int main() {
-    Node* head = createCircularLinkedList();
+    Node* head = NULL;
     int choice, data, position, key;
     
     while (1) {
@@ -218,30 +209,30 @@ int main() {
             case 1:
                 printf("Enter data to insert: ");
                 scanf("%d", &data);
-                insertAtBeginning(&head, data);
+                head = insertAtBeginning(head, data);
                 break;
             case 2:
                 printf("Enter data to insert: ");
                 scanf("%d", &data);
-                insertAtEnd(&head, data);
+                head = insertAtEnd(head, data);
                 break;
             case 3:
                 printf("Enter data to insert: ");
                 scanf("%d", &data);
                 printf("Enter position: ");
                 scanf("%d", &position);
-                insertAtLocation(&head, data, position);
+                head = insertAtLocation(head, data, position);
                 break;
             case 4:
-                deleteAtBeginning(&head);
+                head = deleteAtBeginning(head);
                 break;
             case 5:
-                deleteAtEnd(&head);
+                head = deleteAtEnd(head);
                 break;
             case 6:
                 printf("Enter position to delete: ");
                 scanf("%d", &position);
-                deleteAtLocation(&head, position);
+                head = deleteAtLocation(head, position);
                 break;
             case 7:
                 printf("Circular Linked List: ");
@@ -261,10 +252,11 @@ int main() {
                 printf("Number of nodes in the list: %d\n", count(head));
                 break;
             case 10:
-                reverse(&head);
+                head = reverse(head);
                 printf("List reversed\n");
                 break;
             case 0:
+                // Free memory before exiting the program (not implemented in this code)
                 exit(0);
             default:
                 printf("Invalid choice\n");

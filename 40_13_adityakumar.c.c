@@ -21,44 +21,49 @@ Node* createNode(int data) {
     return newNode;
 }
 
-void insertAtBeginning(Node** head, int data) {
+Node* insertAtBeginning(Node* head, int data) {
     Node* newNode = createNode(data);
-    if (*head == NULL) {
-        *head = newNode;
+    if (head == NULL) {
+        return newNode;
     } else {
-        newNode->next = *head;
-        (*head)->prev = newNode;
-        *head = newNode;
+        newNode->next = head;
+        head->prev = newNode;
+        return newNode;
     }
 }
 
-void insertAtEnd(Node** head, int data) {
+Node* insertAtEnd(Node* head, int data) {
     Node* newNode = createNode(data);
-    if (*head == NULL) {
-        *head = newNode;
+    if (head == NULL) {
+        return newNode;
     } else {
-        Node* temp = *head;
+        Node* temp = head;
         while (temp->next != NULL) {
             temp = temp->next;
         }
         temp->next = newNode;
         newNode->prev = temp;
+        return head;
     }
 }
 
-void insertAtLocation(Node** head, int data, int position) {
+Node* insertAtLocation(Node* head, int data, int position) {
+    Node* newNode = createNode(data);
     if (position <= 0) {
-        insertAtBeginning(head, data);
+        newNode->next = head;
+        if (head != NULL) {
+            head->prev = newNode;
+        }
+        return newNode;
     } else {
-        Node* newNode = createNode(data);
-        Node* temp = *head;
+        Node* temp = head;
         for (int i = 1; i < position && temp != NULL; ++i) {
             temp = temp->next;
         }
         if (temp == NULL) {
             printf("Invalid position\n");
             free(newNode);
-            return;
+            return head;
         }
         newNode->next = temp->next;
         newNode->prev = temp;
@@ -66,58 +71,71 @@ void insertAtLocation(Node** head, int data, int position) {
             temp->next->prev = newNode;
         }
         temp->next = newNode;
+        return head;
     }
 }
 
-void deleteAtBeginning(Node** head) {
-    if (*head == NULL) {
+Node* deleteAtBeginning(Node* head) {
+    if (head == NULL) {
         printf("List is empty\n");
-        return;
+        return NULL;
     }
-    Node* temp = *head;
-    *head = (*head)->next;
-    if (*head != NULL) {
-        (*head)->prev = NULL;
+    Node* temp = head->next;
+    free(head);
+    if (temp != NULL) {
+        temp->prev = NULL;
     }
-    free(temp);
+    return temp;
 }
 
-void deleteAtEnd(Node** head) {
-    if (*head == NULL) {
+Node* deleteAtEnd(Node* head) {
+    if (head == NULL) {
         printf("List is empty\n");
-        return;
+        return NULL;
     }
-    Node* temp = *head;
+    Node* temp = head;
     while (temp->next != NULL) {
         temp = temp->next;
     }
     if (temp->prev != NULL) {
         temp->prev->next = NULL;
     } else {
-        *head = NULL;
+        free(temp);
+        return NULL;
     }
     free(temp);
+    return head;
 }
 
-void deleteAtLocation(Node** head, int position) {
-    if (*head == NULL) {
+Node* deleteAtLocation(Node* head, int position) {
+    if (head == NULL) {
         printf("List is empty\n");
-        return;
+        return NULL;
     }
-    Node* temp = *head;
-    for (int i = 1; i < position && temp != NULL; ++i) {
-        temp = temp->next;
+    if (position <= 0) {
+        Node* temp = head->next;
+        free(head);
+        if (temp != NULL) {
+            temp->prev = NULL;
+        }
+        return temp;
+    } else {
+        Node* temp = head;
+        for (int i = 1; i < position && temp != NULL; ++i) {
+            temp = temp->next;
+        }
+        if (temp == NULL || temp->next == NULL) {
+            printf("Invalid position\n");
+            return head;
+        }
+        Node* toDelete = temp->next;
+        temp->next = temp->next->next;
+        if (temp->next != NULL) {
+            temp->next->prev = temp;
+        }
+        free(toDelete);
+        return head;
     }
-    if (temp == NULL || temp->next == NULL) {
-        printf("Invalid position\n");
-        return;
-    }
-    Node* toDelete = temp->next;
-    temp->next = temp->next->next;
-    if (temp->next != NULL) {
-        temp->next->prev = temp;
-    }
-    free(toDelete);
 }
 
 void display(Node* head) {
@@ -156,9 +174,9 @@ int count(Node* head) {
     return count;
 }
 
-void reverse(Node** head) {
+Node* reverse(Node* head) {
     Node* temp = NULL;
-    Node* current = *head;
+    Node* current = head;
     while (current != NULL) {
         temp = current->prev;
         current->prev = current->next;
@@ -166,8 +184,9 @@ void reverse(Node** head) {
         current = current->prev;
     }
     if (temp != NULL) {
-        *head = temp->prev;
+        head = temp->prev;
     }
+    return head;
 }
 
 int main() {
@@ -193,30 +212,30 @@ int main() {
             case 1:
                 printf("Enter data to insert: ");
                 scanf("%d", &data);
-                insertAtBeginning(&head, data);
+                head = insertAtBeginning(head, data);
                 break;
             case 2:
                 printf("Enter data to insert: ");
                 scanf("%d", &data);
-                insertAtEnd(&head, data);
+                head = insertAtEnd(head, data);
                 break;
             case 3:
                 printf("Enter data to insert: ");
                 scanf("%d", &data);
                 printf("Enter position: ");
                 scanf("%d", &position);
-                insertAtLocation(&head, data, position);
+                head = insertAtLocation(head, data, position);
                 break;
             case 4:
-                deleteAtBeginning(&head);
+                head = deleteAtBeginning(head);
                 break;
             case 5:
-                deleteAtEnd(&head);
+                head = deleteAtEnd(head);
                 break;
             case 6:
                 printf("Enter position to delete: ");
                 scanf("%d", &position);
-                deleteAtLocation(&head, position);
+                head = deleteAtLocation(head, position);
                 break;
             case 7:
                 printf("Double Linked List: ");
@@ -236,7 +255,7 @@ int main() {
                 printf("Number of nodes in the list: %d\n", count(head));
                 break;
             case 10:
-                reverse(&head);
+                head = reverse(head);
                 printf("List reversed\n");
                 break;
             case 0:

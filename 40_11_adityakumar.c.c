@@ -19,91 +19,92 @@ Node* createNode(int data) {
     return newNode;
 }
 
-void insertAtBeginning(Node** head, int data) {
+Node* insertAtBeginning(Node* head, int data) {
     Node* newNode = createNode(data);
-    newNode->next = *head;
-    *head = newNode;
+    newNode->next = head;
+    return newNode;
 }
 
-void insertAtEnd(Node** head, int data) {
+Node* insertAtEnd(Node* head, int data) {
     Node* newNode = createNode(data);
-    if (*head == NULL) {
-        *head = newNode;
-        return;
+    if (head == NULL) {
+        return newNode;
     }
-    Node* temp = *head;
+    Node* temp = head;
     while (temp->next != NULL) {
         temp = temp->next;
     }
     temp->next = newNode;
+    return head;
 }
 
-void insertAtLocation(Node** head, int data, int position) {
+Node* insertAtLocation(Node* head, int data, int position) {
     if (position == 0) {
-        insertAtBeginning(head, data);
-        return;
+        return insertAtBeginning(head, data);
     }
     Node* newNode = createNode(data);
-    Node* temp = *head;
+    Node* temp = head;
     for (int i = 0; i < position - 1; ++i) {
         if (temp == NULL) {
             printf("Invalid position\n");
-            return;
+            return head;
         }
         temp = temp->next;
     }
-    newNode->next = temp->next;
+    newNode->next = temp->next; // newnode links to next node of temp
     temp->next = newNode;
+    return head;
 }
 
-void deleteAtBeginning(Node** head) {
-    if (*head == NULL) {
+Node* deleteAtBeginning(Node* head) {
+    if (head == NULL) {
         printf("List is empty\n");
-        return;
+        return head;
     }
-    Node* temp = *head;
-    *head = (*head)->next;
+    Node* temp = head;
+    head = head->next; // save the address of 2nd element
     free(temp);
+    return head;
 }
 
-void deleteAtEnd(Node** head) {
-    if (*head == NULL) {
+Node* deleteAtEnd(Node* head) {
+    if (head == NULL) {
         printf("List is empty\n");
-        return;
+        return head;
     }
-    if ((*head)->next == NULL) {
-        free(*head);
-        *head = NULL;
-        return;
+    if (head->next == NULL) {
+        free(head);
+        return NULL;
     }
-    Node* temp = *head;
-    while (temp->next->next != NULL) {
+    Node* temp = head;
+    while (temp->next->next != NULL) { // in order to delete the last node, you need a reference to the node that precedes it
         temp = temp->next;
     }
     free(temp->next);
     temp->next = NULL;
+    return head;
 }
 
-void deleteAtLocation(Node** head, int position) {
-    if (*head == NULL) {
+Node* deleteAtLocation(Node* head, int position) {
+    if (head == NULL) {
         printf("List is empty\n");
-        return;
+        return head;
     }
     if (position == 0) {
-        deleteAtBeginning(head);
-        return;
+        return deleteAtBeginning(head);
     }
-    Node* temp = *head;
+    Node* temp = head;
     for (int i = 0; i < position - 1; ++i) {
         if (temp == NULL || temp->next == NULL) {
             printf("Invalid position\n");
-            return;
+            return head;
         }
         temp = temp->next;
     }
     Node* toDelete = temp->next;
-    temp->next = temp->next->next;
-    free(toDelete);
+    temp->next = temp->next->next; // skip the middle node
+    free(toDelete); // free middle node
+    return head;
 }
 
 void display(Node* head) {
@@ -138,9 +139,9 @@ int count(Node* head) {
     return count;
 }
 
-void reverse(Node** head) {
+Node* reverse(Node* head) {
     Node* prev = NULL;
-    Node* current = *head;
+    Node* current = head;
     Node* next = NULL;
     while (current != NULL) {
         next = current->next;
@@ -148,7 +149,7 @@ void reverse(Node** head) {
         prev = current;
         current = next;
     }
-    *head = prev;
+    return prev;
 }
 
 int main() {
@@ -174,30 +175,30 @@ int main() {
             case 1:
                 printf("Enter data to insert: ");
                 scanf("%d", &data);
-                insertAtBeginning(&head, data);
+                head = insertAtBeginning(head, data);
                 break;
             case 2:
                 printf("Enter data to insert: ");
                 scanf("%d", &data);
-                insertAtEnd(&head, data);
+                head = insertAtEnd(head, data);
                 break;
             case 3:
                 printf("Enter data to insert: ");
                 scanf("%d", &data);
                 printf("Enter position: ");
                 scanf("%d", &position);
-                insertAtLocation(&head, data, position);
+                head = insertAtLocation(head, data, position);
                 break;
             case 4:
-                deleteAtBeginning(&head);
+                head = deleteAtBeginning(head);
                 break;
             case 5:
-                deleteAtEnd(&head);
+                head = deleteAtEnd(head);
                 break;
             case 6:
                 printf("Enter position to delete: ");
                 scanf("%d", &position);
-                deleteAtLocation(&head, position);
+                head = deleteAtLocation(head, position);
                 break;
             case 7:
                 printf("Linked List: ");
@@ -217,10 +218,11 @@ int main() {
                 printf("Number of nodes in the list: %d\n", count(head));
                 break;
             case 10:
-                reverse(&head);
+                head = reverse(head);
                 printf("List reversed\n");
                 break;
             case 0:
+                // Free memory before exiting the program (not implemented in this code)
                 exit(0);
             default:
                 printf("Invalid choice\n");
@@ -228,3 +230,5 @@ int main() {
     }
     return 0;
 }
+
+               
